@@ -312,7 +312,8 @@ K.options = {
 		pre : ['id', 'class'],
 		hr : ['id', 'class', '.page-break-after'],
 		'br,tbody,tr,strong,b,sub,sup,em,i,u,strike,s,del' : ['id', 'class'],
-		iframe : ['id', 'class', 'src', 'frameborder', 'width', 'height', '.width', '.height']
+		iframe : ['id', 'class', 'src', 'frameborder', 'width', 'height', '.width', '.height'],
+		video : ['src', 'width', 'height', 'controls']
 	},
 	layout : '<div class="container"><div class="toolbar"></div><div class="edit"></div><div class="statusbar"></div></div>'
 };
@@ -949,12 +950,18 @@ function _mediaAttrs(srcTag) {
 	return _getAttrList(unescape(srcTag));
 }
 function _mediaEmbed(attrs) {
-	var html = '<embed ';
-	_each(attrs, function(key, val) {
-		html += key + '="' + val + '" ';
-	});
-	html += '/>';
-	return html;
+    if (/\.(mp4)(\?|$)/i.test(attrs.src)) {
+        console.log(attrs);
+        var html = '<video controls="controls" width="'+attrs.width+'" height="'+attrs.height+'" src="'+attrs.src+'"></video>';
+        html += '';
+    }else{
+        var html = '<embed ';
+        _each(attrs, function(key, val) {
+            html += key + '="' + val + '" ';
+        });
+        html += '/>';
+    }
+    return html;
 }
 function _mediaImg(blankPath, attrs) {
 	var width = attrs.width,
